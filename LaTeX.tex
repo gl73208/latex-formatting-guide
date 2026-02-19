@@ -1,0 +1,1023 @@
+% ЕСЛИ ССЫЛКИ НЕ ОТОБРАЖАЮТСЯ ИЛИ НЕ ОБНОВИЛИСЬ: При компиляции документа информация об имеющихся метках добавляется в файл с расширением aux. Чтобы извлечь эту информацию, (номер раздела или рисунка - команда \ref) , необходимо пропустить текст через latex ещё раз.
+\documentclass[a4paper, times new roman, oneside]{article}% Определение класса документа, задание шрифта, параметров страницы
+
+
+% Работа со шрифтами
+\usepackage[T2A]{fontenc} % Загрузка стандартного пакета для выбора внутренней кодировки LaTeX
+\usepackage[utf8]{inputenc} % Загрузка стандартного пакета для указания, в какой кодировке набран текст
+\usepackage[english, russian]{babel} % Загрузка языковых пакетов (английский, русский шрифты)
+\usepackage[14pt]{extsizes} % Загрузка набора размеров шрифтов, выбор основного размера шрифта
+\usepackage[usenames]{color} % Пакет для выделения текста цветом
+
+
+% Работа с формулами
+\usepackage{amsmath} % Загрузка пакетов для работы с формулами
+
+
+% Работа с гипертекстом
+\usepackage{hyperref} % Получение гипертекстового документа
+\usepackage{totpages} % Пакет предоставляет информацию о числе страниц, получившихся в результате компиляции 
+
+
+% Работа с титульным листом
+\title{\vspace{4cm} \Huge Форматирование \\ в системе \LaTeX \\ \vspace{1cm}  \huge Пример файла \\ \vspace{1cm} \Large Листов \pageref{TotPages}}% Заголовок, используется при печати титульной страницы командой \maketitle
+\author{} % Фамилия, имя автора (не указаны)
+\date{} % Дата (не проставлена)
+
+
+% Работа с оглавлением
+\usepackage[titles]{tocloft}% Загрузка пакета для оформления оглавления
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}% Настройка содержания
+
+
+% Работа с таблицами
+\usepackage{multirow}% Загрузка пакета для объединения ячеек таблицы 
+\usepackage{array}% Загрузка пакета для выравнивания строк таблицы
+\usepackage{makecell} % Загрузка пакета для создания многострочных ячеек в таблицах
+
+
+% Работа с рисунками
+\usepackage{graphicx} % Загрузка пакета для работы с рисунками
+\graphicspath{{pictures/}}% Указали путь к каталогу с рисунками
+\DeclareGraphicsExtensions{.png, .jpg} %Указали расширения файлов изображений
+\usepackage{float}% Загрузка пакета для корректировки вертикальных отбивок для рисунков
+
+
+% Работа с заголовками
+\renewcommand{\thesection}{\arabic{section}.} % Добавили точку после нумерации заголовка
+\renewcommand{\thesubsection}{\thesection\arabic{subsection}.}
+\renewcommand{\thesubsubsection}{\thesubsection\arabic{subsubsection}.}
+\usepackage{titlesec} % Загрузили альтернативный пакет для формирования заголовков разделов
+\titleformat{\section}[hang]{\normalfont\large\bfseries}{\thesection}{1em}{} % То же для заголовков section
+\titlespacing*{\section}{24pt}{3.25ex plus 1ex minus .2ex}{0.7em}
+\titleformat{\subsection}[hang]{\normalfont\normalsize\bfseries}{\thesubsection}{1em}{} % То же для заголовков subsection
+\titlespacing*{\subsection}{24pt}{3.25ex plus 1ex minus .2ex}{0.5em}
+\titleformat{\subsubsection}[hang]{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{} % То же для заголовков subsubsection
+\titlespacing*{\subsubsection}{24pt}{3.25ex plus 1ex minus .2ex}{0.5em}
+\newcommand{\sectionbreak}{\clearpage} % Задали начало раздела с новой страницы 
+
+
+% Работа с подписями к таблицам и рисункам
+\usepackage[figurename=Рисунок]{caption}% Загрузка пакета для работы с подписями к плавающим объектам
+\DeclareCaptionLabelSeparator{dash}{ --- } % Определили тип разделителя
+\captionsetup{labelsep=dash} % В названиях таблиц и рисунков заменили : на -
+
+
+% Работа с многостраничными таблицами
+\usepackage{longtable}% Загрузка пакета для многостраничных таблиц 
+%\usepackage{ltcaption} % Загрузка пакета для подписи для многостраничных таблиц
+\captionsetup{skip=5pt} % Отбивка для подписи
+
+
+
+% Работа со списками
+\renewcommand{\theenumi}{\asbuk{enumi}}% Отображение счетчика первого уровня строчными буквами кириллицы
+\renewcommand{\labelenumi}{\asbuk{enumi}) }% В счетчике первого уровня заменили а. на а)
+\renewcommand{\theenumii}{\arabic{enumii}}% Отображение счетчика второго уровня с помощью арабских цифр 
+\renewcommand{\labelenumii}{\arabic{enumii}) }% В счетчике второго уровня заменили (1) на 1)
+
+
+% Работа с приложением
+\usepackage{appendix}% Загрузка пакета для работы с приложением
+\newcommand{\intro}[1]{             % Определение новой команды intro
+    \stepcounter{section}   % Декларация \stepcounter изменяет значения существующего счетчика section
+    \section*{\hfill\it{ПРИЛОЖЕНИЕ} \arabic{section}}\vspace{-5pt}\hfill{\itСправочное}\hfil\\% Команда секционирования начинает новый раздел, озаглавленный как Приложение
+    \begin{center}
+        \bf{#1} % Сюда помещается замещающий текст
+    \end{center}
+    \addcontentsline{toc}{section}{Приложение \arabic{section}. #1} % Добавляем названия разделов приложения к оглавлению
+}
+
+
+% Работа с макетом документа
+\usepackage{vmargin} % Загрузка пакета для управления размерами макета через выставку полей
+\usepackage{layout} % Загрузка пакета для вывода информации о текущем макете                                                                      
+\hypersetup{pdfstartview=FitH} % Вид страницы при открытии pdf-файла. FitH - выравнивание по ширине. bookmarks=true по умолчанию (из оглавления формируются закладки) 
+\setmarginsrb{20mm}{12mm}{10mm}{15mm}{14pt}{10mm}{0pt}{0mm} % Установка значений полей (левое, верхнее, правое, нижнее, высота верхнего колонтитула, расстояние между верхним колонтитулом и текстом,  высота нижнего колонтитула, расстояние между текстом и нижним колонтитулом
+
+
+% Работа с колонтитулами
+\usepackage{fancyhdr} % Загрузка пакета для работы с колонтитулами
+\pagestyle{empty} % Очищаем стиль страницы: нет ни колонтитулов, ни номеров страниц 
+\pagestyle{fancy} % Включаем пользовательский стиль для колонтитулов 
+\fancyhead{} % Очистили верхний колонтитул
+\fancyhead[CO]{\small \arabic{page}\\\vspace{3pt} Пример \LaTeX \,файла} % Задаем колонтитул
+\fancyfoot{} % Очистили нижний колонтитул
+\renewcommand{\headrulewidth}{0pt} % Убрали линию между верхним колонтитулом и текстом 
+
+
+% Работа с абзацами
+\usepackage{indentfirst} % Формирование отступа (красной строки) у первого параграфа (для формирования красной строки у остальных абзацев необходимо перед абзацем оставлять пустую строку)
+\usepackage{parskip} % Загрузка пакета для задания параметров абзаца
+\setlength\parskip{10pt} % Вертикальный промежуток между абзацами
+\setlength\parindent{24pt} % Значение абзацного отступа (красной строки)
+\renewcommand{\baselinestretch}{1.25} % Межстрочный интервал 1,5 интервала (1.25 - для шрифта 14)
+\clubpenalty=10000 % Запрет разрыва абзаца после первой строки
+\widowpenalty=10000 % Запрет висячих строк
+
+
+
+\begin{document} % Ниже идет текст документа, выше находится преамбула
+%\layout % Если убрать знак комментария и отключить команду \maketitle, на первой странице будет напечатан макет документа
+
+\maketitle % Титульный лист
+\thispagestyle{empty} % Очищаем стиль страницы: нет ни колонтитулов, ни номеров страниц 
+
+\newpage
+\begin{center}
+
+{\bf Аннотация}
+\end{center}
+
+Настоящий документ является примером \LaTeX \,файла. \LaTeX \,(произносится «латех») --- замечательная альтернатива программам {\it Microsoft Word}, {\it LibreOffice} и другим текстовым редакторам, поскольку:
+\begin{itemize} % Ненумерованный список, начало
+\renewcommand{\labelitemi}{\cdash--*} % Заменили значок, которым помечаются элементы перечня (черный кружок заменили на тире)
+\item  относится к свободно распространяемому ПО; % Командой \item вводится каждый элемент перечня
+\item предназначен для работы в любых операционных системах; при переносе текста с одного компьютера на другой форматирование сохраняется, даже если компьютеры работают под разными операционными системами;
+\item позволяет автору сосредоточиться на содержании текста, принимая на себя заботы по его оформлению;
+\item превосходит остальные издательские системы по качеству текстов, содержащих математические формулы.
+\end{itemize} % Ненумерованный список, конец
+
+\begin{sloppypar}
+\LaTeX \,не является монолитной программой, а состоит из набора пакетов. Дистрибутивы и документация к \LaTeX \, находятся на страничке проекта: http://www.ctan.org.\par
+
+Также существуют онлайн редакторы \LaTeX \,, например, {\it Overleaf} (https://ru.overleaf.com). В данном редакторе предусмотрена автоматическая подсказка и подстановка команд, что позволяет работать с ним уже на начальном этапе знакомства с \LaTeX.
+\end{sloppypar}
+
+
+\renewcommand\contentsname{\hfil \hbox to 2.3in {СОДЕРЖАНИЕ}} % Оформление стиля заголовка оглавления
+\tableofcontents % Вывод оглавления
+
+
+
+
+
+
+
+
+\section{Как происходит работа с \LaTeX} % Название раздела
+\label{sec:work} % Метка для раздела 
+Для начала автор готовит файл с текстом в любом редакторе, оснащенном командами \LaTeX \,(настоящий файл создан при помощи редактора \TeX \,Live).  Такие файлы имеют расширение \texttt{tex}. Далее файл необходимо обработать при помощи компилятора.\par
+
+Исходный файл в самом начале должен содержать команду\par
+
+\texttt{\textbackslash\/documentclass[опции]\{класс\}} \par
+
+в которой \texttt{[опции]} является необязательным, а \texttt{\{класс\}} --- обязательным аргументом, содержащим название класса печатного документа:
+\begin{itemize} % Ненумерованный список, начало
+\item \texttt{article} --- статья или небольшой отчет;
+\item \texttt{letter} --- письмо;
+\item \texttt{report} --- статья, разбитая на главы или небольшая книга;
+\item \texttt{book} --- книга;
+\item \texttt{proc} --- текст в две колонки;
+\item \texttt{slides} --- презентация.
+\end{itemize}
+
+Таким образом, команда \texttt{\textbackslash\/documentclass} определяет основную структуру печатного документа.
+
+Следующей обязательной командой является\par
+
+\texttt{\textbackslash\/begin\{document\}}\par
+
+с которой начинается текст документа. Текст перед  \texttt{\textbackslash\/begin\{document\}} называется преамбулой и содержит команды настройки выбранного класса печатного документа, а также определения новых команд. Заканчивается текст документа командой\par
+
+\texttt{\textbackslash\/end\{document\}}\par
+
+\newpage
+\subsection{Пример \TeX \,файла}\label{sec:work:example} % Название раздела и метка
+
+Теперь можно создать простейший \TeX \,файл:
+
+\texttt{\textbackslash\/documentclass\{article\} \\
+\indent \textbackslash\/begin\{document\} \\
+\indent Example \\
+\indent \textbackslash\/end\{document\}}
+
+После компиляции появится печатная версия файла, на которую будет выведен результат компиляции --- слово \texttt{Example}.
+
+\subsection{Пакеты \LaTeX}\label{sec:work:package} % Название раздела и метка
+
+Пакет --- это служебный текстовый файл, при помощи которого в документ вносятся дополнения и изменения. Пакеты загружаются в редактируемый документ путем добавления в преамбулу команды
+
+\texttt{\textbackslash\/usepackage[опции]\{имя пакета\}}
+
+Опции и имена пакетов, если их несколько, перечисляются через запятую.
+
+
+
+
+
+
+
+\section{Набор текста}\label{sec:text}
+
+\subsection{Русификация \LaTeX}\label{sec:text:russian} % Название подраздела и метка
+
+Чтобы перейти на русскоязычный шрифт, необходимо подключить несколько пакетов:
+
+\texttt{\textbackslash\/documentclass\{article\} \\
+\indent \textbackslash\/usepackage[T2A]\{fontenc\} \\ 
+\indent \textbackslash\/usepackage[utf8]\{inputenc\} \\
+\indent \textbackslash\/usepackage[russian]\{babel\} \\
+\indent \textbackslash\/begin\{document\} \\
+\indent Пример \\
+\indent \textbackslash\/end\{document\}}
+
+В примере в исходный файл были включены:
+\begin{itemize}
+\item \texttt{fontenc} --- пакет для выбора внутренней кодировки шрифтов \LaTeX;
+\item \texttt{inputenc} --- пакет для указания кодировки текста в исходном файле;
+\item \texttt{babel} --- пакет поддержки языков.
+\end{itemize}
+
+\subsection{Шрифты}\label{sec:text:font} % Подраздел второго уровня
+
+\subsubsection{Выделение текста}\label{sec:text:font:type} % Подраздел второго уровня
+Для набора {\bf полужирного} текста используется команда \texttt{\textbackslash\/textbf\{текст\}} или декларация \texttt{\{\textbackslash\/bf текст\}}.
+
+Для {\it курсивного} начертания используется команда \texttt{\textbackslash\/textit\{текст\}} или декларация \texttt{\{\textbackslash\/it текст\}}.
+
+\begin{sloppypar}
+Наконец, чтобы получить \texttt{моноширинный} шрифт, используется команда \texttt{\textbackslash\/texttt\{текст\}} или декларация \texttt{\{\textbackslash\/tt текст\}}.
+\end{sloppypar}
+
+\subsubsection{Размер шрифта}\label{sec:text:font:size} % Подраздел второго уровня
+
+Декларации для переключения размера шрифта приведены в таблице~\ref{tab:fontsize}. Текст, размер которого необходимо изменить, помещается в фигурных скобках сразу после декларации.
+
+\setlength{\extrarowheight}{5pt} % Добавлен вертикальный промежуток между текстом и верхней границей ячейки
+\begin{longtable}[htb]{|m{5cm}<\centering|m{5.5cm}<\centering|m{6cm}<\centering|}
+\captionsetup{singlelinecheck=false}
+\caption*{\hbox to 3.7in {\tablename~\thetable{}~--- Декларации, переключающие размер шрифта}} % Название таблицы
+\label{tab:fontsize}\\ %Метка
+\hline
+{\bf Декларация} & {\bf Название} & {\bf Образец} \\ % Заголовок 
+\hline
+\endfirsthead
+\caption*{\hbox to 3.8in {Продолжение таблицы \thetable{} \hfill }}\\ % Название таблицы для отображения на последующих страницах
+\hline
+{\bf Декларация} & {\bf Название} & {\bf Образец} \\ 
+\hline
+\endhead
+\texttt{\textbackslash\/tiny}   & крошечный & \tiny{Аа \ldots яЯ} \\  \hline
+\texttt{\textbackslash\/scriptsize}   & индексный & \scriptsize{Аа \ldots яЯ} \\ \hline
+\texttt{\textbackslash\/footnotesize}   & подстрочный & \footnotesize{Аа \ldots яЯ} \\ \hline
+\texttt{\textbackslash\/small}   & маленький & \small{Аа \ldots яЯ} \\ \hline
+\texttt{\textbackslash\/normalsize}   & стандартный & \normalsize{Аа \ldots яЯ} \\ \hline
+\texttt{\textbackslash\/large}   & большой & \large{Аа \ldots яЯ} \\ \hline
+\texttt{\textbackslash\/Large}   & огромный & \Large{Аа \ldots яЯ} \\ \hline
+\texttt{\textbackslash\/LARGE}   & громадный & \LARGE{Аа \ldots яЯ} \\ \hline
+\texttt{\textbackslash\/huge}   & грандиозный & \huge{Аа \ldots яЯ} \\ \hline
+\texttt{\textbackslash\/Huge}   & колоссальный & \Huge{Аа \ldots яЯ} \\ \hline
+\end{longtable}
+
+Чтобы задать основной размер шрифта, необходимо загрузить пакет {\tt extsizes}, содержащий набор размеров шрифтов и указать размер шрифта в необязательном аргументе:
+
+{\tt \textbackslash\/usepackage[14pt]\{extsizes\}}
+
+
+
+
+
+
+
+\subsection{Пробелы}\label{sec:text:space} % Подраздел второго уровня
+
+Слова в тексте отделяются друг от друга пробелами, при этом не имеет значения, сколько пробелов набрано: \LaTeX \,автоматически преобразует их в один. Чтобы вручную управлять горизонтальными промежутками, есть специальные команды, описанные в таблице~\ref{tab:space}.\par
+
+\setlength{\extrarowheight}{1pt}
+\begin{longtable}[htb]{|m{3.5cm}<\centering|m{10cm}<\centering|m{3cm}<\centering|}
+\captionsetup{singlelinecheck=false}
+\caption*{\hbox to 3.7in {\tablename~\thetable{}~--- Команды, задающие пробел}} % Название таблицы
+\label{tab:space}\\ %Метка
+\hline
+{\bfКоманда} & {\bf Вид пробела} & | | \\ % Заголовок 
+\hline
+\endfirsthead
+\caption*{\hbox to 3.8in {Продолжение таблицы \thetable{} \hfill }}\\ % Название таблицы для отображения на последующих страницах
+\hline
+{\bfКоманда} & {\bf Вид пробела} & | | \\ 
+\hline
+\endhead
+\texttt{\textbackslash\/quad}   & Пробел в 1em & |\quad| \\ \hline
+\texttt{\textbackslash\/qquad} & Пробел в 2em& |\qquad| \\ \hline
+\texttt{\textbackslash,} & «Тонкий пробел», или тонкая шпация & |\,| \\  \hline
+\texttt{\textbackslash:} &«Средний пробел» & |\:| \\  \hline
+\texttt{\textbackslash;} & «Толстый пробел»& |\;|  \\ \hline
+\texttt{\textbackslash!} & «Отрицательный тонкий пробел» &\\  \hline
+\texttt{\~{}}			  & Неразрывный пробел &\\  \hline
+\texttt{\textbackslash/}   & Корректирующий пробел (используется, например, при переходе от курсива к прямому шрифту)  &\\  \hline
+\texttt{\textbackslash\/hspace\{длина\}}  & Пробел заданной длины   &\\  \hline  
+\texttt{\textbackslash\/hfill} & Пробел бесконечно растяжимой длины  &\\  \hline  
+\end{longtable}
+
+
+
+
+
+
+
+\subsection{Абзацы}\label{sec:text:indent}
+
+\begin{sloppypar}
+Абзацы разделяются между собой пустыми строками; чтобы сформировать абзац для первой строки, необходимо загрузить пакет \texttt{indentfirst} (команда \texttt{\textbackslash\/usepackage\{indentfirst\}} в преамбуле).\par
+\end{sloppypar}
+
+Если не найдена подходящая точка для переноса, текст может выйти за границу правого поля:
+
+Здесь текст, который вышел за границу поля из-за команды: \texttt{\textbackslash\/usepackage\{indentfirst\}}.
+
+В этом случае необходима дополнительная защита от переполнения строки:
+
+\texttt{\textbackslash\/begin\{sloppypar\}\\
+\indent текст абзаца\\
+\indent \textbackslash\/end\{sloppypar\}}
+
+В случае, когда необходимо подавить абзацный отступ, удобно воспользоваться командой \texttt{\textbackslash\/noindent}, которая располагается впереди текста абзаца:
+
+\texttt{\textbackslash\/noindent текст абзаца}
+
+Чтобы завершить текущую страницу и начать с новой страницы, используется команда {\tt \textbackslash\/newpage}.
+
+
+
+
+
+
+
+
+\newpage
+\subsection{Спецсимволы}\label{sec:text:symbol}
+
+Следующие 10 символов:
+
+\texttt{\{ \} \$ \& \# \% \_ \^{} \~{} \textbackslash}
+
+являются специальными; чтобы получить первые семь в печатной версии файла, необходимо в исходном тексте поставить перед соответствующим символом знак \texttt{\textbackslash} без пробела. Символы \texttt{\^{}} и \texttt{\~{}} получаются из комбинаций \texttt{\textbackslash\^{}\{\}} и \texttt{\textbackslash\~{}\{\}} в исходном файле, а символ \texttt{\textbackslash} --- из команды \texttt{\textbackslash\/textbackslash}.
+
+\subsection{Дефисы и тире}\label{sec:text:symbol}
+
+Для получения дефиса (используется в сложных составных словах, например, \texttt{северо-запад}), в исходном тексте набирается один знак \texttt{-}.
+
+Для получения короткого тире (используется при задании числовых промежутков, например, 5--15), набираются два знака - (\texttt{-\/-}).
+
+Тире (---) используется в качестве знака препинания в предложениях и состоит из трех знаков \texttt{-} (\texttt{-\/-\/-}).
+
+\subsection{Многоточие}\label{sec:text:dots}
+
+Для получения многоточия (\ldots) используется команда \texttt{\textbackslash\/ldots}.
+
+Для заполнения пустого пространства в строке точками используется команда \texttt{\textbackslash\/dotfill}: \dotfill
+
+\subsection{Подчеркивание, рамки}\label{sec:text:box}
+
+Чтобы \underline{подчеркнуть} слово, используется команда \texttt{\textbackslash\/underline\{подчеркиваемый текст\}}.
+
+\begin{sloppypar}
+Чтобы поместить текст в \fbox{рамку}, необходимо использовать команду \texttt{\textbackslash\/fbox\{текст\}}.
+\end{sloppypar}
+
+
+
+
+
+
+
+
+\section{Списки}\label{sec:list}
+
+\subsection{Ненумерованный список}\label{sec:list:itemize}
+
+Для составления ненумерованного списка используется процедура
+
+\texttt{\textbackslash\/begin\{itemize\} \\
+\indent \textbackslash\/item \\
+\indent \textbackslash\/item \\
+\indent \ldots \\
+\indent \textbackslash\/end\{itemize\}}
+
+\subsection{Нумерованный список}\label{sec:list:enumerate}
+
+Для составления нумерованного списка используется процедура
+
+\texttt{\textbackslash\/begin\{enumerate\}\\
+\indent \textbackslash\/item\\
+\indent \textbackslash\/item\\
+\indent \ldots \\
+\indent \textbackslash\/end\{enumerate\}}
+
+По умолчанию нумерованный список является числовым. Чтобы преобразовать его в буквенный, необходимо указать в преамбуле (для всего документа) или непосредственно перед списком (команда действует до конца документа, если ее не перезаписать):
+
+\texttt {\textbackslash\/renewcommand\{\textbackslash\/theenumi\}\{\textbackslash\/asbuk\{enumi\}\}}
+
+Теперь, чтобы заменить точку после буквы на круглую скобку, необходимо добавить команду
+
+\texttt{\textbackslash\/renewcommand\{\textbackslash\/labelenumi\}\{\textbackslash\/asbuk\{enumi\})\}}
+
+\subsubsection{Как исключить букву из нумерованного буквенного списка}\label{sec:list:enumerate:letter}
+
+Иногда требуется исключить из списка определенные цифры или буквы (например, по требованию ГОСТа необходимо исключать буквы «з» и «о» из русскоязычного буквенного списка). В этом случае необходимо:
+
+\begin{enumerate}
+\item начать список, как обычно, с команды \texttt{\textbackslash\/begin\{enumerate\}};
+\item продолжить список;
+\item \ldots
+\item \ldots
+\item \ldots
+\item \ldots
+\begin{sloppypar}
+\item  $\leftarrow$ закончить список на букве, предшествующей исключаемой (команда \texttt{\textbackslash\/end\{enumerate\}});
+\end{sloppypar}
+\end{enumerate} %Разбили список на два, чтобы исключить из нумерации букву «з»
+\begin{enumerate}
+\setcounter{enumi}{8} %Новый список начнется с 8-й по счету - буквы «и»
+\item начать новый список, дополнив его командой \texttt{\textbackslash\/setcounter\{enumi\}\{8\}}, позволяющей указать, с какого элемента начнется нумерация (в данном случае с восьмого --- буквы «и», так как в начале списка находится нулевой элемент);
+\item таким образом, буква «з» исключена из буквенного нумерованного списка;
+\item \ldots
+\end{enumerate}
+\ldots
+
+\subsection{Многоуровневый список}\label{sec:list:multilevel}
+
+Исходный код для ненумерованного многоуровневого списка выглядит следующим образом:
+
+\texttt{\textbackslash\/begin\{itemize\} \\
+\indent \textbackslash\/item \\
+\indent \textbackslash\/item \\
+\indent \hspace{1cm} \textbackslash\/begin\{itemize\} \\
+\indent \hspace{1cm} \textbackslash\/item \\
+\indent \hspace{1cm} \textbackslash\/item \\
+\indent \hspace{1cm}  \ldots \\
+\indent \hspace{1cm} \textbackslash\/end\{itemize\}\\
+\indent \ldots \\
+\indent \textbackslash\/end\{itemize\}}
+
+
+\LaTeX \, допускает четыре уровня вложенности списка:
+
+
+\begin{itemize}
+\item Первый уровень 
+\begin{itemize}
+\item Второй уровень
+\begin{itemize}
+\item Третий уровень
+\begin{itemize}
+\item Четвертый (последний) уровень
+\end{itemize}
+\end{itemize}
+\end{itemize}
+\end{itemize}
+
+Чтобы заменить метки, используемые процедурой {\tt itemize} по умолчанию, с помощью команды \texttt{\textbackslash\/renewcommand} переопределяются команды
+
+\begin{tabular}{|c|}
+\hline
+{\tt \textbackslash\/labelitemi} \qquad {\tt \textbackslash\/labelitemii} \\
+{\tt \textbackslash\/labelitemiii} \qquad {\tt \textbackslash\/labelitemiv} \\ \hline
+\end{tabular}
+
+\begin{sloppypar}
+
+\vspace{10pt}
+Например, команда
+
+\texttt{\textbackslash\/renewcommand\{\textbackslash\/labelitemi\}\{\$\textbackslash\/circ\$\}}
+
+заменяет элемент первого уровня на символ  бинарных операторов \texttt{$\circ$} (\texttt{\textbackslash\/circ}). Знаки \$ вокруг записи символа означают переход в математический режим форматирования, позволяющий использовать в тексте символы математических операций, а также формулы, о которых речь пойдет в следующем разделе.
+\end{sloppypar}
+
+Для нумерованного списка элементами второго уровня по умолчанию являются буквы английского алфавита, заключенные в круглые скобки. Их можно заменить на арабские цифры при помощи команды
+ 
+\texttt{\textbackslash\/renewcommand\{\textbackslash\/theenumii\}\{\textbackslash\/arabic\{enumii\}\}}
+
+Для замены круглых скобок на закрывающую круглую скобку используется команда
+
+\texttt{\textbackslash\/renewcommand\{\textbackslash\/labelenumii\}\{\textbackslash\/arabic\{enumii\})\}}
+
+
+
+
+
+
+
+\section{Формулы}\label{sec:formula}
+
+Чтобы использовать в тексте формулы, необходимо подключить в преамбуле пакет \texttt{amsmath}:
+
+\texttt{\textbackslash\/usepackage\{amsmath\}}
+
+Для небольших формул, которые размещаются внутри абзаца, существует процедура форматирования математических формул \texttt{math} и три варианта обращения к ней:
+
+\begin{tabular}{|c|}
+\hline
+\texttt{\textbackslash\/begin\{math\} \ldots \;\textbackslash\/end\{math\}} \\ 
+\texttt{\textbackslash\/( \ldots \;\textbackslash\/)} \\ 
+\texttt{\$ \ldots \;\$} \\ \hline
+\end{tabular}
+
+
+\vspace{10pt}
+Процедура {\tt equation} производит формулы, расположенные в отдельной строке, и автоматически нумерует их. Существует два варианта обращения к данной процедуре:
+
+\begin{tabular}{|c|}
+\hline
+\texttt{\textbackslash\/begin\{equation\} \ldots \;\textbackslash\/end\{equation\}} \\ 
+\texttt{\$\$ \ldots \;\$\$} \\ \hline
+\end{tabular}
+
+Чтобы отключить нумерацию, необходимо процедуру \texttt{equation} заменить на \texttt{equation*}.
+
+В таблице \ref{tab:formula} приведены команды для задания математических знаков, используемых в формулах.
+
+\LTleft=0pt
+\begin{longtable}[htb]{|m{10cm}<\centering|m{5cm}<\centering|}
+\captionsetup{singlelinecheck=off}
+\caption*{\hbox to 3.7in {\tablename~\thetable{}~--- Команды для задания математических знаков}} % Название таблицы
+\label{tab:formula}\\ %Метка
+\hline
+{\bfКоманда} & {\bf Пример} \\ % Заголовок 
+\hline
+\endfirsthead
+\caption*{\hbox to 3.8in {Продолжение таблицы \thetable{} \hfill }}\\ % Название таблицы для отображения на последующих страницах
+\hline
+{\bfКоманда} & {\bf Пример} \\ 
+\hline
+\endhead
+\texttt{\textbackslash\/sqrt[степень]\{подкоренное выражение\}} & $\sqrt[3]{a+b}$  \\ \hline
+\texttt{\textbackslash\/frac\{числитель\}\{знаменатель\}} & $\frac{a+b}{c}$ \\ \hline
+\texttt{выражение\^{}степень} & $b^2$ \\  \hline
+\texttt{\textbackslash\/cos} & $\cos x$ \\  \hline
+\texttt{\textbackslash\/sin} & $\sin x$ \\ \hline
+\texttt{\textbackslash\/tg} & $\tg x$ \\ \hline
+\texttt{\textbackslash\/ctg} & $\ctg x$ \\ \hline
+\texttt{\textbackslash\/exp} & $\exp$ \\ \hline
+\texttt{\textbackslash\/ln\{выражение\}} & $\ln2$ \\ \hline
+\texttt{\textbackslash\/log\_степень выражение} & $\log_2 10$ \\  \hline
+\texttt{\textbackslash\/lim\_предел} & $\lim_{n\to\infty}$ \\  \hline
+\texttt{\textbackslash\/min} & $\min$ \\ \hline
+\texttt{\textbackslash\/max} & $\max$ \\ \hline
+\texttt{\textbackslash\/sum\_\{нижний предел\}\^{}\{верхний предел\}} & $\sum_{i=1}^n$ \\ \hline
+\texttt{\textbackslash\/int\_\{нижний предел\}\^{}\{верхний предел\}} & $\int_0^{\infty}$ \\ \hline
+\texttt{ (\, \textbackslash\/big(\, \textbackslash\/Big(\, \textbackslash\/bigg(\, \textbackslash\/Bigg(} & $( \big( \Big( \bigg( \Bigg($ \\ \hline
+\texttt{ [\, \textbackslash\/big[\, \textbackslash\/Big[\, \textbackslash\/bigg[\, \textbackslash\/Bigg[} & $[ \big[ \Big[ \bigg[ \Bigg[$ \\ \hline
+\end{longtable}
+
+
+
+
+
+
+
+
+
+
+
+\section{Заголовки}\label{sec:head}
+
+Для класса документа вида {\tt article} существуют следующие команды секционирования:
+
+\noindent{\tt \textbackslash\/section\{Название раздела\}}\\
+{\tt \textbackslash\/subsection\{Название подраздела\}}\\
+{\tt \textbackslash\/subsubsection\{Название пункта\}}\\
+{\tt \textbackslash\/paragraph\{Название параграфа\}}
+
+Каждая из приведенных выше команд начинает новую составную часть документа, то есть присваивает ей номер, печатает заголовок и вносит этот заголовок в оглавление.
+
+Для печати оглавления используется команда {\tt \textbackslash\/tableofcontents}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Перекрестные ссылки}\label{sec:link}
+
+Чтобы сослаться на раздел, рисунок, таблицу, формулу или пункт перечня, необходимо поставить метку:
+
+{\tt \textbackslash\/label\{метка\}}
+ 
+после команды именования соответствующего окружения. В случае таблиц или картинок такой командой является {\tt \textbackslash\/caption}, в случае пунктов перечня --- {\tt \textbackslash\/item}.
+
+Метка представляет любую комбинацию латинских букв, цифр и некоторых знаков препинания. В частности при составлении меток удобно использовать двоеточие (:) и дефис (-).
+
+Когда ссылки идут через метку, то номер раздела (команда {\tt \textbackslash\/ref}) и номер страницы (команда {\tt \textbackslash\/pageref}) определяется \LaTeX \,автоматически.
+
+Например, для заголовка пункта \ref{sec:text:font:size} была поставлена метка 
+
+{\tt \textbackslash\/label\{sec:text:font:size\}}
+
+где через двоеточие указаны наименования раздела, подраздела и, наконец, пункта. Для ссылки на данный пункт используется команда
+
+{\tt \textbackslash\/ref\{sec:text:font:size\}}
+
+
+
+
+
+
+
+
+
+
+\section{Рисунки}\label{sec:picture}
+
+Чтобы работать в \LaTeX \,с графическими изображениями, необходимо загрузить пакет {\tt graphicx} (см.~\ref{sec:work:package}). Также предварительно нужно создать каталог(и) для рисунков и указать путь в преамбуле:
+
+\texttt {\textbackslash\/graphicspath\{\{каталог 1/\}\{каталог 2/\}\ldots\}} 
+
+\begin{sloppypar}
+Расширения графических файлов задаются при помощи команды {\tt \textbackslash\/DeclareGraphicsExtensions\{exts\}}, где аргумент {\tt exts} --- список расширений имен файлов, перечисленных через запятую, например
+
+{\tt \textbackslash\/DeclareGraphicsExtensions\{.png, .jpg\}}
+
+Чтобы разместить в тексте изображение, используется команда {\tt \textbackslash\/includegraphics\{\}}, где в фигурных скобках указывается имя файла. Ниже приведен пример использования данной команды:
+\end{sloppypar}
+
+{\bf Исходный код}
+
+{\tt Кнопка \textbackslash\/includegraphics\{compile\} запускает процесс компиляции.}
+
+{\bf Вывод на печать}
+
+Кнопка \includegraphics{compile} запускает процесс компиляции.
+
+\subsection{Процедура {\tt figure}}\label{sec:picture:figure}
+
+Для автоматизированного размещения рисунков существует процедура {\tt figure}, рассматривающая рисунок как плавающий объект (если для объекта нет места на текущей странице, он переносится на следующую). Ниже приведен пример использования процедуры {\tt figure}:
+
+\noindent {\tt \textbackslash\/begin\{figure\}[htb] \\ 
+    \textbackslash\/centering  \textcolor{red}{\% Размещение по центру} \\
+    \textbackslash\/includegraphics[width=\textbackslash\/textwidth]\{имя файла\}  \\ 
+    \textbackslash\/caption\{Название рисунка\}  \textcolor{red}{\% Подрисуночная подпись} \\
+    \textbackslash\/label\{fig:label\} \textcolor{red}{\% Метка} \\ 
+\textbackslash\/end\{figure\}}
+
+  Пример изображения представлен на рис.~\ref{fig:pic}.
+  
+\begin{figure}[htb] % Процедура для размещения рисунка
+    \centering % Размещение по центру
+    \includegraphics[width=\textwidth]{example} % Рисунок example.jpg загружен с помощью онлайн редактора изображений
+    \vspace{-15pt}
+    \caption{Пример изображения} % Подрисуночная подпись
+    \label{fig:pic} % Метка
+\end{figure}
+
+Необязательный аргумент процедуры {\tt figure} задает способы размещения плавающего объекта:
+
+\noindent {\tt h} --- разместить по возможности здесь же; \\
+{\tt t} --- разместить в верхней части страницы; \\
+{\tt b} --- разместить в нижней части страницы; \\
+{\tt p} --- разместить на отдельной странице, где нет ничего кроме плавающих объектов.
+
+Если указано несколько букв, возможен любой из предусматриваемых этими буквами вариантов размещения.
+
+Команда {\tt \textbackslash\/caption\{\}} создает подпись к рисунку и печатает порядковый номер рисунка. Для работы с подписями к плавающим объектам необходимо загрузить пакет {\tt caption} (см.~\ref{sec:work:package}).
+
+По умолчанию в \LaTeX \, подрисуночная подпись начинается со слова Рис., после которого следует двоеточие и название рисунка:
+
+{\tt Рис.: Название рисунка}
+
+Чтобы представить подрисуночную подпись в виде
+
+{\tt Рисунок} --- {\tt Название рисунка}
+
+необходимо в преамбуле добавить команды:
+
+\noindent {\tt {\textbackslash\/DeclareCaptionLabelSeparator\{dash\}\{ -\/-\/-\ \}\\
+\textbackslash\/captionsetup\{labelsep=dash\}}}
+
+и добавить опцию при подключении пакета {\tt caption}:
+
+\noindent {\tt {\textbackslash\/usepackage[figurename=Рисунок]\{caption\}}}
+
+{\tt \textbackslash\/textwidth} --- это переменная, хранящая значение длины, равной ширине текста. Размерами рисунка также можно управлять через параметр {\tt scale}, например: 
+
+{\tt \textbackslash\/includegraphics[scale=0.25]\{имя файла\}}
+
+
+
+
+
+
+
+\section{Таблицы}\label{sec:table}
+
+\subsection{Процедура {\tt tabular}}\label{sec:table:tabular}
+
+Процедура \texttt{tabular} задает таблицу. В обязательном аргументе, помещаемом в фигурных скобках непосредственно после команды {\tt \textbackslash\/begin\{tabular\}}, задается последовательность букв (по одной на столбец), обозначающих выравнивание текста в ячейке:\\
+{\tt l} --- выравнивание слева; \\
+{\tt c} --- выравнивание по центру; \\
+{\tt r} --- выравнивание справа.
+
+{\tt p\{ширина\}} --- еще один способ задать столбец; означает абзац текста, ширина которого задается в фигурных скобках.
+
+Символ {\tt \&} делит данные на ячейки. Разделительные линии между столбцами задаются с помощью вертикальной черты~{\tt |}. Горизонтальные линии создаются при помощи команды {\tt \textbackslash\/hline}. Строки в теле процедуры разделяются командой~\texttt{\textbackslash\/\textbackslash}. Заканчивается процедура командой {\tt \textbackslash\/end\{tabular\}}.\par
+
+
+Ниже приведен исходный код для создания таблицы в \LaTeX:
+
+\noindent\texttt{\textbackslash\/begin\{tabular\}\{|l|l|\}    \textcolor{red}{\% Два столбца, выравнивание слева}  \\
+ 	\textbackslash\/hline   \textcolor{red}{\% Горизонтальная линия} \\
+ 	\{\textbackslash\/bf Заголовок 1\} \& \{\textbackslash\/bf Заголовок 2\} \textbackslash\/\textbackslash \, \textcolor{red}{\% Заголовок} \\ 
+ 	\textbackslash\/hline \\
+ 	ячейка  1/1 	\& \, ячейка  1/2 \textbackslash\/\textbackslash \, \textbackslash\/hline \textcolor{red}{\% Тело таблицы} \\
+ 	ячейка  2/1	 \& \, ячейка  2/2 \textbackslash\/\textbackslash \, \textbackslash\/hline \\
+ 	ячейка  3/1	 \& \, ячейка  3/2 \textbackslash\/\textbackslash \, \textbackslash\/hline \\
+ 	\textbackslash\/end\{tabular\}}
+
+В результате компиляции вышеприведенного кода получится таблица:
+
+\begin{tabular}{|l|l|} % Описание для колонок (выравнивание слева)
+\hline % Горизонтальная линия
+{\bf Заголовок 1} & {\bf Заголовок 2} \\ \hline
+ячейка 1/1 & ячейка 1/2 \\ \hline % Тело таблицы
+ячейка 2/1 & ячейка 2/2 \\ \hline
+ячейка 3/1 & ячейка 3/2 \\ \hline
+\end{tabular}
+
+
+\subsection{Процедура {\tt table}}\label{sec:table:table}
+
+Процедура \texttt{table} служит для задания названия таблицы, метки для ссылки, параметров размещения таблицы относительно остального текста и автоматической нумерации.\par
+
+\begin{sloppypar}
+Для работы с подписью к таблице необходимо подключить пакет {\tt caption} (см.~\ref{sec:work:package}). Тогда команда {\tt \textbackslash\/captionsetup\{singlelinecheck=off\}} позволит выровнять по левому краю подпись, которая по умолчанию располагается в центре страницы; команды {\tt \textbackslash\/setlength\{\textbackslash\/abovecaptionskip\}\{\ldots\}} и {\tt \textbackslash\/setlength\{\textbackslash\/belowcaptionskip\}\{\ldots\}} позволят управлять вертикальными отбивками вокруг подписи.
+\end{sloppypar}
+
+
+\noindent\texttt{\textbackslash\/begin\{table\}[htb]  \textcolor{red}{\% Размещение таблицы} \\
+\textbackslash\/captionsetup\{singlelinecheck=off\}  \textcolor{red}{\% Подпись выровнена по левому краю} \\
+\textbackslash\/setlength\{\textbackslash\/abovecaptionskip\}\{0pt\}  \textcolor{red}{\% Отступ между названием и таблицей} \\
+\textbackslash\/setlength\{\textbackslash\/belowcaptionskip\}\{5pt\}  \textcolor{red}{\% Отступ между текстом и названием} \\
+\textbackslash\/caption\{Название таблицы\}   \textcolor{red}{\% Название таблицы} \\
+\textbackslash\/label\{tab:label\}   \textcolor{red}{\% Метка} \\
+\textbackslash\/begin\{tabular\} \\
+\ldots \\
+\textbackslash\/end\{tabular\} \\
+ \textbackslash\/end\{table\} }
+
+  
+Теперь после компиляции таблица будет пронумерована, и к ней добавятся название и метка для ссылки (см. таблицу~\ref{tab:label}).
+
+\begin{table}[htb] % Размещение таблицы
+\captionsetup{singlelinecheck=off} % Подпись выровнена по левому краю
+\setlength{\abovecaptionskip}{0pt} % Отступ между названием таблицы и таблицей
+\setlength{\belowcaptionskip}{5pt} % Отступ между текстом и названием таблицы
+\caption{Название таблицы}
+\label{tab:label} % Метка
+\begin{tabular}{|l|l|} % Описание для колонок (выравнивание слева, колонки разделены вертикальными линиями) 
+\hline % Горизонтальная линия
+{\bf Заголовок 1} & {\bf Заголовок 2} \\ \hline
+ячейка 1/1 & ячейка 1/2 \\ \hline
+ячейка 2/1 & ячейка 2/2 \\ \hline
+ячейка 3/1 & ячейка 3/2 \\ \hline
+\end{tabular}
+\end{table}
+  
+\newpage
+
+\subsection{Дополнительные возможности}\label{sec:table:additional}
+\subsubsection{Пакет {\tt multirow}}\label{sec:table:multirow}
+
+Пакет {\tt multirow} (см.~\ref{sec:work:package}) позволяет объединять ячейки таблицы. В аргументе команды {\tt \textbackslash\/multirow} задается, сколько ячеек нужно объединить, ширина конечной ячейки и непосредственно текст ячейки.
+
+Команда {\tt \textbackslash\/cline\{\ldots\}} позволяет прочертить горизонтальную линию не по всей ширине таблицы, а охватывая заданное число колонок. Номера первой и последней из колонок, которые необходимо соединить горизонтальной линией, указываются в фигурных скобках.
+
+Ниже приведен исходный код для создания таблицы с объединенными ячейками.
+
+\noindent\texttt{\textbackslash\/begin\{tabular\}\{|c|c|c|\} \\
+   \textbackslash\/hline \\
+   \textbackslash\/multirow\{2\}\{3cm\}\{\textbackslash\/hspace\{0.25cm\} Заголовок\}  \\
+    \& \textbackslash\/multicolumn\{2\}\{c|\}\{Общий заголовок\}\textbackslash\/\textbackslash \, \textbackslash\/cline\{2-3\} \\
+    \&  столбец 1 	\&  столбец 2  \textbackslash\/\textbackslash \, \textbackslash\/hline \\
+строка 1 \&	ячейка 1/1 \&	ячейка 1/2 \textbackslash\/\textbackslash \, \textbackslash\/hline \\
+строка 2 \&	ячейка 2/1 \&	ячейка 2/2 \textbackslash\/\textbackslash \, \textbackslash\/hline \\
+     \textbackslash\/end\{tabular\}}
+
+Результатом компиляции данного кода будет таблица:
+
+\begin{tabular}{|c|c|c|}
+   \hline
+   \multirow{2}{3cm}{\hspace{0.25cm} Заголовок} 
+    & \multicolumn{2}{c|}{Общий заголовок }\\ \cline{2-3}
+    &  столбец 1 	&  столбец 2  \\ \hline
+строка 1 &	ячейка 1/1 &	ячейка 1/2 \\ \hline
+строка 2 &	ячейка 2/1 &	ячейка 2/2 \\ \hline
+     \end{tabular}
+
+
+\subsubsection{Пакет {\tt array}}\label{sec:table:array}
+
+При подключении пакета {\tt array} (см.~\ref{sec:work:package}) появляется простой способ борьбы с примыканием горизонтальных линеек к тексту: надо присвоить ненулевое значение параметру {\tt \textbackslash\/extrarowheight}. Это --- величина, которая добавляется к высоте каждой строки таблицы, по умолчанию равная нулю. Для лучшего отделения линеек от текста хорошо присвоить ей значение 2--3 пункта:
+
+{\tt \textbackslash\/setlength\{\textbackslash\/extrarowheight\}\{3pt\}}
+
+Также при подключении пакета {\tt array} наряду с выражением {\tt p\{\ldots\}}, можно использовать выражения {\tt m\{\ldots\}} и {\tt b\{\ldots\}}. Как и {\tt p\{\ldots\}}, они указывают, что в колонке находится абзац текста ширины, заданной в фигурных скобках. Отличается способ выравнивания:\\
+{\tt p\{\ldots\}} --- выравнивание по верхней строке абзаца;\\
+{\tt b\{\ldots\}} --- выравнивание по нижней строке абзаца;\\
+{\tt m\{\ldots\}} --- абзац выравнивается по середине своей высоты.
+
+
+\subsubsection{Пакет {\tt makecell}}\label{sec:table:makecell}
+
+Для создания многострочных ячеек в таблицах удобно использовать команду {\tt \textbackslash\/makecell}. Предварительно в преамбуле необходимо подключить пакет {\tt makecell} (см.~\ref{sec:work:package}).
+
+
+\subsection{Многостраничные таблицы}\label{sec:table:longtable}
+
+\begin{sloppypar}
+Для создания многостраничной таблицы необходимо подключить пакет {\tt longtable} (см.~\ref{sec:work:package}). Ниже находится пример исходного кода для размещения многостраничной таблицы:
+\end{sloppypar}
+
+\noindent\texttt{\textbackslash\/begin\{longtable\}[htb]\{|m\{5cm\}|m\{5cm\}|\}  \textcolor{red}{\% Ширина колонок 5 см}\\
+\textbackslash\/captionsetup\{singlelinecheck=off\}\\
+\textbackslash\/caption*\{\textbackslash\/hbox to 3.7in \{\textbackslash\/tablename \textbackslash;\textbackslash\/thetable\{\} -\/-\/- Название таблицы\}\} \\
+\textbackslash\/label\{tab:label\}\textbackslash\/\textbackslash  \textcolor{red}{\% Метка таблицы} \\
+\textbackslash\/hline  \textcolor{red}{\% Горизонтальная линия} \\
+\{Заголовок 1\} \& \{Заголовок 2\}  \textbackslash\/\textbackslash \\
+\textbackslash\/hline \\
+\textbackslash\/endfirsthead  \textcolor{red}{\% Конец заголовка на первой странице} \\
+\textbackslash\/caption*\{\textbackslash\/hbox to 3.8in \{Продолжение таблицы \textbackslash\/thetable\{\} \textbackslash\/hfill \}\}\textbackslash\/\textbackslash \\
+\textbackslash\/hline \\
+\{Заголовок 1\} \& \{Заголовок 2\} \textbackslash\/\textbackslash  \\
+\textbackslash\/hline \\
+\textbackslash\/endhead  \textcolor{red}{\% Конец заголовка на последующих страницах} \\
+ячейка 1/1 \& ячейка 1/2 \textbackslash\/\textbackslash \, \textbackslash\/hline \\
+ячейка 2/1 \& ячейка 2/2 \textbackslash\/\textbackslash \, \textbackslash\/hline \\
+ячейка 3/1 \& ячейка 3/2 \textbackslash\/\textbackslash \, \textbackslash\/hline \\
+\ldots \\
+ячейка n/1 \& ячейка n/2 \textbackslash\/\textbackslash \, \textbackslash\/hline \\
+\textbackslash\/end\{longtable\}}
+
+По умолчанию многостраничные таблицы размещаются по центру. Для выравнивания по левому краю необходимо до начала таблицы добавить команду
+
+{\tt \textbackslash\/LTleft=0pt}
+
+
+
+
+
+
+
+
+
+
+\section{Макет документа}\label{sec:layout} 
+
+Формат листа можно задать в первой команде документа, например:
+
+{\tt \textbackslash\/documentclass[a4paper, times new roman, oneside]\{article\}}
+
+где {\tt a4paper} --- установка размера листа бумаги {\tt A4} (по умолчанию {\tt letter});
+{\tt oneside} --- форматирование документа для односторонней печати.
+
+Для управления размерами макета через выставку полей необходимо загрузить пакет {\tt vmargin} и указать в преамбуле значения полей:
+
+\begin{sloppypar}
+{\tt \textbackslash\/setmarginsrb\{левое поле\}\{верхнее поле\}\{правое поле\}\{нижнее поле\}\{высота верхнего колонтитула\}\{расстояние от текста до верхнего колонтитула\}\{высота нижнего колонтитула\}\{расстояние от текста до нижнего колонтитула\}}
+\end{sloppypar}
+
+Конкретные значения аргументов команды {\tt \textbackslash\/setmarginsrb} могут быть следующими:
+
+{\tt \textbackslash\/setmarginsrb\{20mm\}\{25mm\}\{10mm\}\{15mm\}\{0pt\}\{0mm\}\{14pt\}\{10mm\}}
+
+Команда {\tt \textbackslash\/pagestyle\{\}} задает стиль страницы:
+
+\noindent{\tt empty} --- страница выводится без каких-либо колонтитулов --- только текст; \\
+{\tt plain} --- выводится только номер страницы в нижнем колонтитуле; \\
+{\tt headings} --- в верхнем колонтитуле выводится номер страницы и информация, определяемая классом документа.
+
+
+
+
+
+
+
+
+\section{Титульный лист}\label{sec:title} 
+
+Титульный лист печатается при помощи команды {\tt \textbackslash\/maketitle}. Параметры титульного листа задаются в преамбуле:
+
+\noindent{\tt \textbackslash\/title\{Название\}} \\
+{\tt \textbackslash\/author\{Автор\}} \\
+{\tt \textbackslash\/date\{Дата\}}
+
+\begin{sloppypar}
+Чтобы очистить стиль титульной страницы, используется команда {\tt \textbackslash\/thispagestyle\{empty\}}.
+\end{sloppypar}
+
+
+
+
+
+
+
+\section{Конвертация {\tt tex} файла в другие форматы}\label{sec:convert} 
+ 
+Чтобы конвертировать файл формата {\tt tex} в формат {\tt html} (в кодировке {\tt utf8}), нужно:
+
+\begin{enumerate}
+\item скопировать {\tt filename.tex} в папку {\tt C:\textbackslash\/Users\textbackslash\/Username};
+\item скопировать рисунки в папку {\tt C:\textbackslash\/Users\textbackslash\/Username\textbackslash\/Изображения};
+\item набрать в командной строке 
+
+{\tt make4ht -u filename.tex}
+
+           или
+ 
+{\tt htlatex filename.tex}
+
+\end{enumerate}
+
+  
+
+
+
+Чтобы создать файл с расширением {\tt odt}, нужно:
+
+\begin{enumerate}
+\item скопировать {\tt filename.tex} в папку {\tt C:\textbackslash\/Users\textbackslash\/Username};
+\item скопировать картинки в папку {\tt C:\textbackslash\/Users\textbackslash\/Username\textbackslash\/Изображения};
+\item набрать в командной строке 
+
+{\tt make4ht -f odt filename.tex}
+
+\end{enumerate}
+
+   
+   
+   
+   
+   
+
+
+
+\appendix % Приложение
+\newpage                                                                                    
+\intro{Перечень принятых обозначений}\label{symbol}
+
+В тексте документа используются следующие соглашения:
+\begin{itemize}
+\renewcommand{\labelitemi}{\cdash--*}
+    \item команды и вывод в печатную версию приведены \texttt{моноширинным} шрифтом (символы имеют равную ширину);
+    \item текст после символа \textcolor{red}{\tt \%} в примерах исходного кода означает комментарий и выделен \textcolor{red}{красным} цветом.
+\end{itemize}
+                                                                                 
+\newpage
+\intro{Перечень команд для задания символов}\label{binary}
+
+\begin{sloppypar}
+Для получения необходимого символа необходимо задающую его команду поместить в процедуру форматирования математических операций (например, \texttt{\$~\ldots~\;\$}).
+\end{sloppypar}
+
+\vspace{10pt}
+
+\LTleft=0pt
+\begin{longtable}[htb]{m{3cm}<\centering m{1cm}  m{5cm}<\centering}
+{\bf Символ} && {\bf Команда}  \\ % Заголовок 
+\endfirsthead
+\caption*{\hbox to 3.7in {Продолжение перечня команд для задания символов}}\\ 
+{\bf Символ} && {\bf Команда}  \\ 
+\endhead
+$+$ && {\tt +} \\ 
+$-$ && {\tt -} \\ 
+$*$ && {\tt *} \\ 
+$\pm$ && {\tt \textbackslash\/pm}\\ 
+$\times$ && {\tt \textbackslash\/times} \\ 
+$ \div$ && {\tt \textbackslash\/div} \\ 
+$\circ$ && {\tt \textbackslash\/circ} \\ 
+$\bullet$ && {\tt \textbackslash\/bullet} \\ 
+$\triangleright$ && {\tt \textbackslash\/triangleright} \\ 
+$\triangleleft$ && {\tt \textbackslash\/triangleleft} \\ 
+$\bigtriangledown$ && {\tt \textbackslash\/bigtriangledown} \\ 
+$\bigtriangleup$ && {\tt \textbackslash\/bigtriangleup} \\ 
+$\bigcirc$ && {\tt \textbackslash\/bigcirc} \\ 
+$<$ && {\tt <} \\  
+$>$ && {\tt >} \\ 
+$=$ && {\tt =} \\ 
+$:$ && {\tt :} \\ 
+$\le$ && {\tt \textbackslash\/le} \\ 
+$\ge$ && {\tt \textbackslash\/ge} \\ 
+$\ne$ && {\tt \textbackslash\/ne} \\ 
+$\approx$ && {\tt \textbackslash\/approx} \\ 
+$\ll$ && {\tt \textbackslash\/ll} \\ 
+$\gg$ && {\tt \textbackslash\/gg} \\ 
+$\parallel$ && {\tt \textbackslash\/parallel} \\ 
+$\to$  && {\tt \textbackslash\/to} \\
+$\gets$ && {\tt \textbackslash\/gets} \\
+$\uparrow$ && {\tt \textbackslash\/uparrow} \\
+$\downarrow$ && {\tt \textbackslash\/downarrow} \\
+$\infty$ && {\tt \textbackslash\/infty} \\
+$\S$ && {\tt \textbackslash\/S}
+\end{longtable}
+
+
+\end{document} % Конец документа. Текст, который находится ниже, не отображается в скомпилированном файле.
